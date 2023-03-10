@@ -6,7 +6,7 @@ const Songs = () => {
   const queryKey = ["songs"];
   const queryFn = async () => {
     const response = await fetch(
-      "https://stream-tube-server.vercel.app/songs"
+      "http://localhost:5000/songs"
     );
     const jsonData = await response.json();
     return jsonData;
@@ -28,7 +28,7 @@ const Songs = () => {
       <h4 className="text-lg font-semibold mt-5 mb-2">Most Popular Song</h4>
 <div className="md:grid grid-cols-3 lg:grid-cols-5 gap-3">
 {songsData?.map((song) => (
-        <Song movie={song} key={song._id} />
+        <Song song={song} key={song._id} />
       ))}
 </div>
     </div>

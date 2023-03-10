@@ -7,6 +7,7 @@ import { AuthContext } from "../../context/ContextProvider/ContextProvider";
 
 const Navbar = () => {
   const [dark, setDark] = useState(false);
+  const [shadow, setShadow] = useState(false);
   const { user, logOut } = useContext(AuthContext);
   // console.log(user);
   const handleLogOut = () => {
@@ -31,9 +32,25 @@ const Navbar = () => {
       document.querySelector("html").setAttribute("data-theme", "mytheme");
     }
   }, [dark]);
+  useEffect(() => {
+    const handleShadow = () => {
+      if (window.scrollY >= 90) {
+        setShadow(true);
+      } else {
+        setShadow(false);
+      }
+    };
+    window.addEventListener("scroll", handleShadow);
+  }, []);
   return (
-    <div>
-      <div className="navbar bg-base-100 flex justify-between p-5">
+    <div
+      className={
+        shadow
+          ? "fixed w-full h-20 shadow-xl z-[100] ease-in-out duration-300"
+          : "fixed w-full h-20 z-[100]"
+      }
+    >
+      <div className="navbar bg-base-100 flex justify-between p-5 ">
         <div className="">
           <TfiVideoClapper className="w-8 h-8" />
           <Link to={"/"} className="btn btn-ghost normal-case text-2xl">
@@ -101,9 +118,9 @@ const Navbar = () => {
                 </Link>
               </li>
               {user?.uid ? (
-<li >
-<button onClick={handleLogOut}>Log out</button>
-</li>
+                <li>
+                  <button onClick={handleLogOut}>Log out</button>
+                </li>
               ) : (
                 <li>
                   <Link to={"/login"}>Login</Link>

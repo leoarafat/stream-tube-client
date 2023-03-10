@@ -6,7 +6,7 @@ const Movies = () => {
   const queryKey = ["movies"];
   const queryFn = async () => {
     const response = await fetch(
-      "https://stream-tube-server.vercel.app/movies"
+      "http://localhost:5000/movies"
     );
     const jsonData = await response.json();
     return jsonData;

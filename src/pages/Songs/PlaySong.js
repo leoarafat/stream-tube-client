@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { GrView } from "react-icons/gr";
 import {
@@ -9,40 +9,102 @@ import {
 import { BsCalendarEvent } from "react-icons/bs";
 import { SlUserFollow } from "react-icons/sl";
 import { TfiComment } from "react-icons/tfi";
+import ReactPlayer from "react-player";
+import { AuthContext } from "../../context/ContextProvider/ContextProvider";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
+import SongComment from "./SongCpmment";
 const PlaySong = () => {
+  const { user } = useContext(AuthContext);
+    const song = useLoaderData();
+    const {
+        Views,
+        title,
+        channel,
+        description,
+        like,
+        posted_date,
+        videoLink,
+        _id
+      } = song;
+      
   const [comment, setComment] = useState("");
-  const song = useLoaderData();
-  console.log(song);
+  const [likeCount, setLikeCount] = useState(like);
+  
+  
+  const queryKey = ["songComment"];
+  const queryFn = async () => {
+    const response = await fetch(`http://localhost:5000/songComment/${_id}`);
+    const jsonData = await response.json();
+    return jsonData;
+  };
   const {
-    Views,
-    title,
-    category,
-    channel,
-    description,
-    dislike,
-    like,
-    posted_date,
-    videoLink,
-    thumbNail,
-  } = song;
-
+    data: songCommentData,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery(queryKey, queryFn);
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(`Submitting comment: ${comment}`);
-    // TODO: Submit the comment to the server
+    const commentInfo = {
+      userName: user?.displayName,
+      comment,
+      postId: _id,
+      time: new Date(),
+    };
+    // console.log('comment')
+
+    fetch(`http://localhost:5000/songComment`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(commentInfo),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        console.log("hit inside");
+        if (data.acknowledged) {
+          // console.log(data);
+
+          refetch();
+          toast.success("Comment added successful");
+        }
+      });
   };
 
   const handleCommentChange = (event) => {
     setComment(event.target.value);
+  };
+  const handleLike = (Id) => {
+    // console.log("hit outside");
+    fetch(`http://localhost:5000/songLike/${Id}`, {
+      method: "PUT",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+
+        if (data.modifiedCount > 0) {
+          setLikeCount((prevLikeCount) => prevLikeCount + 1);
+        }
+      });
   };
   return (
     <div>
       <div className="md:grid grid-cols-12">
         <div className="col-span-8">
           <div className="card bg-base-100 shadow-xl">
-            <figure>
-              <img src={thumbNail} alt="Shoes" />
-            </figure>
+            <ReactPlayer
+              width={"100%"}
+              height={"100%"}
+              controls
+              playing
+              url={videoLink}
+            />
             <div className="card-body">
               <h2 className="card-title">{title}</h2>
               <div className="">
@@ -62,9 +124,9 @@ const PlaySong = () => {
               <ul className="flex justify-center items-center shadow-md bg-base-100 rounded-sm">
                 <li className="p-2 mr-5">
                   <div className="indicator">
-                    <AiOutlineLike className="w-8 h-8" />
+                    <AiOutlineLike onClick={()=>handleLike(_id)} className="w-8 h-8" />
 
-                    <span className="badge badge-sm indicator-item">8</span>
+                    <span className="badge badge-sm indicator-item">{likeCount}</span>
                   </div>
                 </li>
                 <li className="p-2 mr-5">
@@ -96,6 +158,18 @@ const PlaySong = () => {
         </div>
         <div className="col-span-4">
           <div>
+          <div>
+              {songCommentData?.map((comment) => (
+                <SongComment
+                  key={comment._id}
+                  _id={comment._id}
+                  comment={comment.comment}
+                  postId={comment.postId}
+                  name={comment.userName}
+                  time={comment.time}
+                />
+              ))}
+            </div>
             <form
               onSubmit={handleSubmit}
               className="bg-gray-100 rounded-lg p-4 hover:shadow-lg"
