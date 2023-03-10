@@ -1,11 +1,38 @@
-import React from 'react';
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import Song from "./Song";
 
 const Songs = () => {
-    return (
-        <div>
-            songs
-        </div>
+  const queryKey = ["songs"];
+  const queryFn = async () => {
+    const response = await fetch(
+      "https://stream-tube-server.vercel.app/songs"
     );
+    const jsonData = await response.json();
+    return jsonData;
+  };
+
+  const { data: songsData, isLoading, isError } = useQuery(queryKey, queryFn);
+  console.log(songsData);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading data</div>;
+  }
+
+  return (
+    <div >
+      <h4 className="text-lg font-semibold mt-5 mb-2">Most Popular Song</h4>
+<div className="md:grid grid-cols-3 lg:grid-cols-5 gap-3">
+{songsData?.map((song) => (
+        <Song movie={song} key={song._id} />
+      ))}
+</div>
+    </div>
+  );
 };
 
 export default Songs;

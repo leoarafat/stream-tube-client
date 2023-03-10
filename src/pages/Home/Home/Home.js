@@ -1,15 +1,18 @@
-import React from 'react';
-import Marquee from 'react-fast-marquee';
+import React from "react";
+import Coming from "../../Coming/Coming";
+import Footer from "../../Footer/Footer";
+import Movies from "../../Movies/Movies";
+import Songs from "../../Songs/Songs";
 
 const Home = () => {
-    return (
-        <div>
-           <h1>This is Home</h1> 
-           {/* <Marquee>
-  I can be a React component, multiple React components, or just some text.
-</Marquee> */}
-        </div>
-    );
+  return (
+    <div>
+      <Coming />
+      <Movies/>
+      <Songs/>
+      <Footer/>
+    </div>
+  );
 };
 
 export default Home;
