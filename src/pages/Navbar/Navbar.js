@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { MdOutlineNotificationsNone } from "react-icons/md";
 import { BsCloudSun, BsMoonStars, BsSearchHeart } from "react-icons/bs";
 import { TfiVideoClapper } from "react-icons/tfi";
 import { AuthContext } from "../../context/ContextProvider/ContextProvider";
 import { RiUserLine } from "react-icons/ri";
+import axios from "axios";
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
 
@@ -13,6 +14,13 @@ const Navbar = () => {
       .then(() => {})
       .catch((err) => console.log(err));
   };
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const searchRef = useRef();
+  const handleSearch = async () => {
+    setSearchTerm(searchRef.current.value);
+  };
+  console.log(searchTerm);
 
   return (
     <div>
@@ -22,23 +30,23 @@ const Navbar = () => {
       >
         <div className="">
           <Link to={"/"} className="btn btn-ghost normal-case text-2xl">
-            <TfiVideoClapper className="w-8 h-8 mr-1" />
-            StrTube
+            {/* <TfiVideoClapper className="w-8 h-8 mr-1" /> */}
+            <img
+              className="w-10"
+              src="https://i.ibb.co/tQScx8g/play-framework-892738-removebg-preview.png"
+              alt=""
+            />
+            <span className="text-gray-300">StreamTube</span>
           </Link>
         </div>
         <div>
-          <div className="relative ml-3">
-            <input
-              type="text"
-              placeholder="Search for video near you"
-              className="py-2 pl-8 pr-4 block w-full rounded-lg bg-gray-100 border border-transparent focus:outline-none focus:bg-white focus:border-gray-300"
-            />
-            <BsSearchHeart className="absolute top-1/2 transform -translate-y-1/2 left-3 text-gray-400" />
-          </div>
+          <div className=" ml-3"></div>
+        </div>
+        <div className="">
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle">
               <div className="indicator">
-                <MdOutlineNotificationsNone className="w-8 h-8" />
+                <MdOutlineNotificationsNone className="w-6 h-6" />
 
                 <span className="badge badge-sm indicator-item">8</span>
               </div>
@@ -58,8 +66,6 @@ const Navbar = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="">
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="">
