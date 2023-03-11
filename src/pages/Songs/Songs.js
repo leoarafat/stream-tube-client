@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { toast } from "react-hot-toast";
+import Loader from "../../component/Loader/Loader";
 import Song from "./Song";
 
 const Songs = () => {
   const queryKey = ["songs"];
   const queryFn = async () => {
     const response = await fetch(
-      "http://localhost:5000/songs"
+      "https://stream-tube-server.vercel.app/songs"
     );
     const jsonData = await response.json();
     return jsonData;
@@ -16,17 +18,19 @@ const Songs = () => {
   console.log(songsData);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>
+      <Loader/>
+    </div>;
   }
 
   if (isError) {
-    return <div>Error loading data</div>;
+    return <div>{toast.error('Error loading data')}</div>;
   }
 
   return (
-    <div >
-      <h4 className="text-lg font-semibold mt-5 mb-2">Most Popular Song</h4>
-<div className="md:grid grid-cols-3 lg:grid-cols-5 gap-3">
+    <div className="">
+      <h4 className="text-lg font-semibold mt-5 m-3 text-white">Most Popular Song</h4>
+<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 m-3">
 {songsData?.map((song) => (
         <Song song={song} key={song._id} />
       ))}

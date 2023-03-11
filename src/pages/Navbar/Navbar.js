@@ -4,10 +4,8 @@ import { MdOutlineNotificationsNone } from "react-icons/md";
 import { BsCloudSun, BsMoonStars, BsSearchHeart } from "react-icons/bs";
 import { TfiVideoClapper } from "react-icons/tfi";
 import { AuthContext } from "../../context/ContextProvider/ContextProvider";
-
+import { RiUserLine } from "react-icons/ri";
 const Navbar = () => {
-  const [dark, setDark] = useState(false);
-  const [shadow, setShadow] = useState(false);
   const { user, logOut } = useContext(AuthContext);
   // console.log(user);
   const handleLogOut = () => {
@@ -16,55 +14,19 @@ const Navbar = () => {
       .catch((err) => console.log(err));
   };
 
-  const handleDark = () => {
-    setDark(!dark);
-    localStorage.setItem("dark-mode", !dark);
-  };
-
-  useEffect(() => {
-    const localDark = JSON.parse(localStorage.getItem("dark-mode"));
-    setDark(localDark);
-  }, []);
-  useEffect(() => {
-    if (dark) {
-      document.querySelector("html").setAttribute("data-theme", "dark");
-    } else {
-      document.querySelector("html").setAttribute("data-theme", "mytheme");
-    }
-  }, [dark]);
-  useEffect(() => {
-    const handleShadow = () => {
-      if (window.scrollY >= 90) {
-        setShadow(true);
-      } else {
-        setShadow(false);
-      }
-    };
-    window.addEventListener("scroll", handleShadow);
-  }, []);
   return (
-    <div
-      className={
-        shadow
-          ? "fixed w-full h-20 shadow-xl z-[100] ease-in-out duration-300"
-          : "fixed w-full h-20 z-[100]"
-      }
-    >
-      <div className="navbar bg-base-100 flex justify-between p-5 ">
+    <div>
+      <div
+        className="navbar text-white bg-gradient-to-r from-[#141e30] to-[#243b55] flex justify-between p-5 "
+        style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 999 }}
+      >
         <div className="">
-          <TfiVideoClapper className="w-8 h-8" />
           <Link to={"/"} className="btn btn-ghost normal-case text-2xl">
+            <TfiVideoClapper className="w-8 h-8 mr-1" />
             StreamTube
           </Link>
         </div>
         <div>
-          <div onClick={handleDark}>
-            {dark ? (
-              <BsCloudSun className="h-6 w-6" />
-            ) : (
-              <BsMoonStars className="h-6 w-6" />
-            )}
-          </div>
           <div className="relative ml-3">
             <input
               type="text"
@@ -83,7 +45,7 @@ const Navbar = () => {
             </label>
             <div
               tabIndex={0}
-              className="mt-3 card card-compact dropdown-content w-52 bg-base-100 shadow"
+              className="mt-3 card card-compact dropdown-content w-52 bg-gradient-to-r from-[#141e30] to-[#243b55] shadow"
             >
               <div className="card-body">
                 <span className="font-bold text-lg">8 Items</span>
@@ -100,19 +62,16 @@ const Navbar = () => {
         <div className="">
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYu9wI5JhmD4tqCG6nBJYvpIFL6I-iXE5WTrCXh-w&s"
-                  alt=""
-                />
+              <div className="">
+                <RiUserLine className="w-10 h-10" />
               </div>
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-gradient-to-r from-[#141e30] to-[#243b55] rounded-box w-52"
             >
               <li>
-                <Link className="justify-between">
+                <Link to={"/profile"} className="justify-between">
                   Profile
                   <span className="badge">New</span>
                 </Link>

@@ -15,7 +15,7 @@ const Song = ({ song }) => {
   };
   const handleView = (Id) => {
     // console.log("hit outside");
-    fetch(`http://localhost:5000/songView/${Id}`, {
+    fetch(`https://stream-tube-server.vercel.app/songView/${Id}`, {
       method: "PUT",
     })
       .then((res) => res.json())

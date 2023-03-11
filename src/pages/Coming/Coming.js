@@ -8,14 +8,15 @@ import "./styles.css";
 
 
 
+
 const Coming = () => {
    
   return (
     
     <div>
-<Marquee>
-<h1 className="text-2xl text-center text-primary shadow-lg bg-base-100">See Whats new is comming...</h1>
-</Marquee>
+<p className="">
+<h1 className="text-2xl text-center text-primary p-4">See Whats new is comming...</h1>
+</p>
         <Swiper
         pagination={{
           type: "fraction",

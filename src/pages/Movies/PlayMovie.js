@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { GrView } from "react-icons/gr";
 import {
   AiOutlineLike,
@@ -11,12 +11,16 @@ import { SlUserFollow } from "react-icons/sl";
 import { TfiComment } from "react-icons/tfi";
 import ReactPlayer from "react-player";
 import { AuthContext } from "../../context/ContextProvider/ContextProvider";
+import Swal from "sweetalert2";
 import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import MovieComment from "./MovieComment";
+import SweetAlert from "react-swal";
 const PlayMovie = () => {
+  const { user } = useContext(AuthContext);
+  console.log(user?.email);
   const movie = useLoaderData();
-  //   console.log(movie);
+
   const {
     Views,
     title,
@@ -32,10 +36,12 @@ const PlayMovie = () => {
   const [likeCount, setLikeCount] = useState(like);
 
   // console.log(comment);
-  const { user } = useContext(AuthContext);
+
   const queryKey = ["moviesComment"];
   const queryFn = async () => {
-    const response = await fetch(`http://localhost:5000/movieComment/${_id}`);
+    const response = await fetch(
+      `https://stream-tube-server.vercel.app/movieComment/${_id}`
+    );
     const jsonData = await response.json();
     return jsonData;
   };
@@ -46,6 +52,7 @@ const PlayMovie = () => {
     isError,
     refetch,
   } = useQuery(queryKey, queryFn);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(`Submitting comment: ${comment}`);
@@ -57,7 +64,7 @@ const PlayMovie = () => {
     };
     // console.log('comment')
 
-    fetch(`http://localhost:5000/moviesComment`, {
+    fetch(`https://stream-tube-server.vercel.app/moviesComment`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -69,8 +76,6 @@ const PlayMovie = () => {
         console.log(data);
         console.log("hit inside");
         if (data.acknowledged) {
-          // console.log(data);
-
           refetch();
           toast.success("Comment added successful");
         }
@@ -82,19 +87,26 @@ const PlayMovie = () => {
   };
   const handleLike = (Id) => {
     // console.log("hit outside");
-    fetch(`http://localhost:5000/movieLike/${Id}`, {
-      method: "PUT",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+    if (user?.email) {
+      fetch(`https://stream-tube-server.vercel.app/movieLike/${Id}`, {
+        method: "PUT",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
 
-        if (data.modifiedCount > 0) {
-          setLikeCount((prevLikeCount) => prevLikeCount + 1);
-        }
+          if (data.modifiedCount > 0) {
+            setLikeCount((prevLikeCount) => prevLikeCount + 1);
+          }
+        });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Please login first",
       });
+    }
   };
-  
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -102,12 +114,43 @@ const PlayMovie = () => {
   if (isError) {
     return <div>Error loading data</div>;
   }
-
+  const handleShare = (item) => {
+    const postData = { item, email: user?.email };
+    if (user?.email) {
+      Swal.fire({
+        title: "Do you want to share this post?",
+        showCancelButton: true,
+        confirmButtonText: "share",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch("http://localhost:5000/sharePost", {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify(postData),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              // console.log(data)
+              if (data.acknowledged) {
+                toast.success("Shared");
+              }
+            });
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Please login first",
+      });
+    }
+  };
   return (
-    <div>
-      <div className="md:grid grid-cols-12">
+    <div className="bg-gradient-to-r from-[#141e30] to-[#243b55] p-3">
+      <div className="md:grid grid-cols-12 mt-[100px]">
         <div className="col-span-8">
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-gradient-to-r from-[#006663] to-[#111111] bg-base-100 shadow-xl">
             <ReactPlayer
               playing
               width={"100%"}
@@ -124,7 +167,9 @@ const PlayMovie = () => {
                 </p>
                 <p className="flex items-center text-lg">
                   <TfiComment className="h-6 w-6" />
-                  <span className="ml-1">0 Comment</span>
+                  <span className="ml-1">
+                    {moviesCommentData?.length} Comments
+                  </span>
                 </p>
                 <p className="flex items-center text-lg">
                   <GrView className="h-6 w-6" />
@@ -132,12 +177,9 @@ const PlayMovie = () => {
                 </p>
               </div>
               <ul className="flex justify-center items-center shadow-md bg-base-100 rounded-sm">
-                <li className="p-2 mr-5">
+                <li onClick={() => handleLike(_id)} className="p-2 mr-5">
                   <div className="indicator">
-                    <AiOutlineLike
-                      onClick={() => handleLike(_id)}
-                      className="w-8 h-8"
-                    />
+                    <AiOutlineLike className="w-8 h-8" />
 
                     <span className="badge badge-sm indicator-item">
                       {likeCount}
@@ -148,10 +190,10 @@ const PlayMovie = () => {
                   <div className="indicator">
                     <AiOutlineDislike className="w-8 h-8" />
 
-                    <span className="badge badge-sm indicator-item">8</span>
+                    <span className="badge badge-sm indicator-item"></span>
                   </div>
                 </li>
-                <li>
+                <li onClick={() => handleShare(movie)}>
                   <AiOutlineShareAlt className="w-8 h-8" />
                 </li>
               </ul>
@@ -165,13 +207,13 @@ const PlayMovie = () => {
               </div>
               <hr className="mt-2" />
               <div>
-                <h2 className="text-xl">Song description:</h2>{" "}
+                <h2 className="text-xl">Movie description:</h2>{" "}
                 <p className="text-lg">{description}</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="col-span-4">
+        <div className="col-span-4 pl-2">
           <div>
             <div>
               {moviesCommentData?.map((comment) => (
@@ -184,23 +226,36 @@ const PlayMovie = () => {
                 />
               ))}
             </div>
-            <form
-              onSubmit={handleSubmit}
-              className="bg-gray-100 rounded-lg p-4 hover:shadow-lg"
-            >
-              <textarea
-                value={comment}
-                onChange={handleCommentChange}
-                className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-                placeholder="Write a comment"
-              />
-              <button
-                type="submit"
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md mt-2"
+            {user?.uid ? (
+              <form
+                onSubmit={handleSubmit}
+                className="bg-gradient-to-r from-[#006663] to-[#111111] rounded-lg p-4 hover:shadow-lg"
               >
-                Submit
-              </button>
-            </form>
+                <textarea
+                  value={comment}
+                  onChange={handleCommentChange}
+                  className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+                  placeholder="Write a comment"
+                />
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md mt-2"
+                >
+                  Submit
+                </button>
+              </form>
+            ) : (
+              <Link to={"/login"}>
+                <button
+                  type="submit"
+                  className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
+                >
+                  <span className="relative text-base font-semibold text-white dark:text-dark">
+                    LogIn
+                  </span>
+                </button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
