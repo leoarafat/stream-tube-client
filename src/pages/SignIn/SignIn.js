@@ -8,7 +8,7 @@ const SignIn = () => {
   const [error, setError] = useState("");
   // const [success, setSuccess] = useState('');
   const { signIn, updateUser, googleSignUp } = useContext(AuthContext);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   // const location = useLocation();
   // const from = location.state?.from?.pathname || "/";
 
@@ -23,7 +23,8 @@ const SignIn = () => {
         const user = res.user;
         // setSuccess('Successfully LogedIn')
         toast.success("Successfully LogIn");
-        console.log(user);
+        // console.log(user);
+        navigate('/')
         const userInfo = {
           displayName: name,
         };
@@ -44,7 +45,7 @@ const SignIn = () => {
         console.log(user);
 
         toast.success("Successfully Login!");
-        // navigate(from, { replace: true });
+        navigate('/');
       })
       .catch((error) => {
         const errorCode = error.code;

@@ -5,6 +5,7 @@ import {
   AiOutlineLike,
   AiOutlineDislike,
   AiOutlineShareAlt,
+  AiFillLike,
 } from "react-icons/ai";
 import { BsCalendarEvent } from "react-icons/bs";
 import { SlUserFollow } from "react-icons/sl";
@@ -33,13 +34,13 @@ const PlaySong = () => {
 
   const [comment, setComment] = useState("");
   console.log(comment);
-
+  const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(like);
 
   const queryKey = ["songComment"];
   const queryFn = async () => {
     const response = await fetch(
-      `https://stream-tube-server.vercel.app/songComment/${_id}`
+      `https://stream-tube-server-leoarafat.vercel.app/songComment/${_id}`
     );
     const jsonData = await response.json();
     return jsonData;
@@ -59,10 +60,11 @@ const PlaySong = () => {
       comment,
       postId: _id,
       time: new Date(),
+      email: user?.email,
     };
     // console.log('comment')
 
-    fetch(`https://stream-tube-server.vercel.app/songComment`, {
+    fetch(`https://stream-tube-server-leoarafat.vercel.app/songComment`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -85,18 +87,29 @@ const PlaySong = () => {
   const handleCommentChange = (event) => {
     setComment(event.target.value);
   };
-  const handleLike = (Id) => {
-    // console.log("hit outside");
+
+  const handleLike = (id) => {
     if (user?.email) {
-      fetch(`https://stream-tube-server.vercel.app/songLike/${Id}`, {
+      fetch(`http://localhost:5000/songLike/${id}`, {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: user?.email }),
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-
-          if (data.modifiedCount > 0) {
-            setLikeCount((prevLikeCount) => prevLikeCount + 1);
+          if (data.message === "Song liked successfully") {
+            setLiked(!liked);
+            setLikeCount((prevLikeCount) => prevLikeCount + (liked ? -1 : 1));
+          } else if (data.message === "Song unliked successfully") {
+            setLiked(!liked);
+            setLikeCount((prevLikeCount) => prevLikeCount - 1);
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Unable to like song",
+            });
           }
         });
     } else {
@@ -106,6 +119,7 @@ const PlaySong = () => {
       });
     }
   };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -122,7 +136,7 @@ const PlaySong = () => {
         confirmButtonText: "share",
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch("http://localhost:5000/shareSong", {
+          fetch("https://stream-tube-server-leoarafat.vercel.app/shareSong", {
             method: "POST",
             headers: {
               "content-type": "application/json",
@@ -176,12 +190,13 @@ const PlaySong = () => {
                 </p>
               </div>
               <ul className="flex justify-center items-center shadow-md  rounded-sm">
-                <li className="p-2 mr-5">
+                <li onClick={() => handleLike(_id)} className="p-2 mr-5">
                   <div className="indicator">
-                    <AiOutlineLike
-                      onClick={() => handleLike(_id)}
-                      className="w-8 h-8"
-                    />
+                    {liked ? (
+                      <AiFillLike className="w-8 h-8" />
+                    ) : (
+                      <AiOutlineLike className="w-8 h-8" />
+                    )}
 
                     <span className="badge badge-sm indicator-item">
                       {likeCount}

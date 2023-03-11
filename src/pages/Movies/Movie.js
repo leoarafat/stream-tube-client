@@ -15,7 +15,7 @@ const Movie = ({ movie }) => {
   };
   const handleView = (Id) => {
     // console.log("hit outside");
-    fetch(`https://stream-tube-server.vercel.app/movieView/${Id}`, {
+    fetch(`https://stream-tube-server-leoarafat.vercel.app/movieView/${Id}`, {
       method: "PUT",
     })
       .then((res) => res.json())

@@ -26,6 +26,7 @@ const SignUp = () => {
         updateUser(userInfo).then(() => {});
         // setSuccess('Successfully registered')
         toast.success("Successfully Register!");
+        naviGate("/");
         console.log(user);
       })
       .catch((err) => {

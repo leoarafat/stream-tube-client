@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/ContextProvider/ContextProvider";
 import { RiUserLine } from "react-icons/ri";
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
-  // console.log(user);
+
   const handleLogOut = () => {
     logOut()
       .then(() => {})
@@ -23,7 +23,7 @@ const Navbar = () => {
         <div className="">
           <Link to={"/"} className="btn btn-ghost normal-case text-2xl">
             <TfiVideoClapper className="w-8 h-8 mr-1" />
-            StreamTube
+            StrTube
           </Link>
         </div>
         <div>

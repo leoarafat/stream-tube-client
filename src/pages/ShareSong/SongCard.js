@@ -31,7 +31,7 @@ const SongCard = ({ song }) => {
   const queryKey = ["songComment"];
   const queryFn = async () => {
     const response = await fetch(
-      `https://stream-tube-server.vercel.app/songComment/${_id}`
+      `https://stream-tube-server-leoarafat.vercel.app/songComment/${_id}`
     );
     const jsonData = await response.json();
     return jsonData;
@@ -54,7 +54,7 @@ const SongCard = ({ song }) => {
     };
     // console.log('comment')
 
-    fetch(`https://stream-tube-server.vercel.app/songComment`, {
+    fetch(`https://stream-tube-server-leoarafat.vercel.app/songComment`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -74,7 +74,7 @@ const SongCard = ({ song }) => {
 
   const handleLike = (Id) => {
     // console.log("hit outside");
-    fetch(`https://stream-tube-server.vercel.app/songLike/${Id}`, {
+    fetch(`https://stream-tube-server-leoarafat.vercel.app/songLike/${Id}`, {
       method: "PUT",
     })
       .then((res) => res.json())

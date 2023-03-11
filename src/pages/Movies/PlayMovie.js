@@ -5,6 +5,7 @@ import {
   AiOutlineLike,
   AiOutlineDislike,
   AiOutlineShareAlt,
+  AiFillLike,
 } from "react-icons/ai";
 import { BsCalendarEvent } from "react-icons/bs";
 import { SlUserFollow } from "react-icons/sl";
@@ -34,13 +35,13 @@ const PlayMovie = () => {
 
   const [comment, setComment] = useState("");
   const [likeCount, setLikeCount] = useState(like);
-
+  const [liked, setLiked] = useState(false);
   // console.log(comment);
 
   const queryKey = ["moviesComment"];
   const queryFn = async () => {
     const response = await fetch(
-      `https://stream-tube-server.vercel.app/movieComment/${_id}`
+      `https://stream-tube-server-leoarafat.vercel.app/movieComment/${_id}`
     );
     const jsonData = await response.json();
     return jsonData;
@@ -61,10 +62,11 @@ const PlayMovie = () => {
       comment,
       postId: _id,
       time: new Date(),
+      email: user?.email,
     };
     // console.log('comment')
 
-    fetch(`https://stream-tube-server.vercel.app/moviesComment`, {
+    fetch(`https://stream-tube-server-leoarafat.vercel.app/moviesComment`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -85,18 +87,29 @@ const PlayMovie = () => {
   const handleCommentChange = (event) => {
     setComment(event.target.value);
   };
-  const handleLike = (Id) => {
-    // console.log("hit outside");
+
+  const handleLike = (id) => {
     if (user?.email) {
-      fetch(`https://stream-tube-server.vercel.app/movieLike/${Id}`, {
+      fetch(`http://localhost:5000/movieLike/${id}`, {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: user?.email }),
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
-
-          if (data.modifiedCount > 0) {
-            setLikeCount((prevLikeCount) => prevLikeCount + 1);
+          if (data.message === "movie liked successfully") {
+            setLiked(!liked);
+            setLikeCount((prevLikeCount) => prevLikeCount + (liked ? -1 : 1));
+          } else if (data.message === "movie unliked successfully") {
+            setLiked(!liked);
+            setLikeCount((prevLikeCount) => prevLikeCount - 1);
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Unable to like movie",
+            });
           }
         });
     } else {
@@ -123,7 +136,7 @@ const PlayMovie = () => {
         confirmButtonText: "share",
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch("http://localhost:5000/sharePost", {
+          fetch("https://stream-tube-server-leoarafat.vercel.app/sharePost", {
             method: "POST",
             headers: {
               "content-type": "application/json",
@@ -176,10 +189,14 @@ const PlayMovie = () => {
                   <span className="ml-1">{Views} Viewers</span>
                 </p>
               </div>
-              <ul className="flex justify-center items-center shadow-md bg-base-100 rounded-sm">
+              <ul className="flex justify-center items-center shadow-md  rounded-sm">
                 <li onClick={() => handleLike(_id)} className="p-2 mr-5">
                   <div className="indicator">
-                    <AiOutlineLike className="w-8 h-8" />
+                    {liked ? (
+                      <AiFillLike className="w-8 h-8" />
+                    ) : (
+                      <AiOutlineLike className="w-8 h-8" />
+                    )}
 
                     <span className="badge badge-sm indicator-item">
                       {likeCount}

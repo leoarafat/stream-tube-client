@@ -43,13 +43,13 @@ export const router = createBrowserRouter([
       {
         path: "/movie/:id",
         loader: ({ params }) =>
-          fetch(`https://stream-tube-server.vercel.app/movies/${params.id}`),
+          fetch(`https://stream-tube-server-leoarafat.vercel.app/movies/${params.id}`),
         element: <PlayMovie />,
       },
       {
         path: "/song/:id",
         loader: ({ params }) =>
-          fetch(`https://stream-tube-server.vercel.app/songs/${params.id}`),
+          fetch(`https://stream-tube-server-leoarafat.vercel.app/songs/${params.id}`),
         element: <PlaySong />,
       },
     ],

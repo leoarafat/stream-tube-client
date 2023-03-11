@@ -6,7 +6,7 @@ const ShareSong = () => {
   const [sharesSong, setSharesSong] = useState([]);
   const { user } = useContext(AuthContext);
   useEffect(() => {
-    fetch(`http://localhost:5000/shareSong?email=${user?.email}`)
+    fetch(`https://stream-tube-server-leoarafat.vercel.app/shareSong?email=${user?.email}`)
       .then((res) => res.json())
       .then((data) => {
         setSharesSong(data);

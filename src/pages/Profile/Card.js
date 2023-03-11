@@ -31,7 +31,7 @@ const Card = ({ profile }) => {
   const queryKey = ["moviesComment"];
   const queryFn = async () => {
     const response = await fetch(
-      `https://stream-tube-server.vercel.app/movieComment/${_id}`
+      `https://stream-tube-server-leoarafat.vercel.app/movieComment/${_id}`
     );
     const jsonData = await response.json();
     return jsonData;
@@ -54,7 +54,7 @@ const Card = ({ profile }) => {
     };
     // console.log('comment')
 
-    fetch(`https://stream-tube-server.vercel.app/moviesComment`, {
+    fetch(`https://stream-tube-server-leoarafat.vercel.app/moviesComment`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -75,7 +75,7 @@ const Card = ({ profile }) => {
 
   const handleLike = (Id) => {
     // console.log("hit outside");
-    fetch(`https://stream-tube-server.vercel.app/movieLike/${Id}`, {
+    fetch(`https://stream-tube-server-leoarafat.vercel.app/movieLike/${Id}`, {
       method: "PUT",
     })
       .then((res) => res.json())
