@@ -44,7 +44,7 @@ function SearchItem() {
 
   const handleSearch = async () => {
     const response = await axios.get(
-      `http://localhost:5000/cards/search?searchQuery=${searchQuery}`
+      `https://stream-tube-server-leoarafat.vercel.app/cards/search?searchQuery=${searchQuery}`
     );
     setSearchResults(response.data);
   };
@@ -67,4 +67,3 @@ function SearchItem() {
 }
 
 export default SearchItem;
-

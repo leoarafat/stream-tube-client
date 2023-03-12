@@ -45,7 +45,7 @@ const Songs = () => {
         animationData={SongAnim}
       ></Lottie>
       <h4 className="text-lg font-semibold mt-5 m-3 text-white text-center">Most Popular Song</h4>
-<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 m-3">
+<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3 m-3">
 {songsData?.map((song) => (
         <Song song={song} key={song._id} />
       ))}

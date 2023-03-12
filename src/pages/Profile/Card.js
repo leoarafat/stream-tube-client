@@ -41,37 +41,7 @@ const Card = ({ profile }) => {
     data: moviesCommentData,
     isLoading,
     isError,
-    refetch,
   } = useQuery(queryKey, queryFn);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(`Submitting comment: ${comment}`);
-    const commentInfo = {
-      userName: user?.displayName,
-      comment,
-      postId: _id,
-      time: new Date(),
-    };
-    // console.log('comment')
-
-    fetch(`https://stream-tube-server-leoarafat.vercel.app/moviesComment`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(commentInfo),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        console.log("hit inside");
-        if (data.acknowledged) {
-          refetch();
-          toast.success("Comment added successful");
-        }
-      });
-  };
-
 
   const handleLike = (Id) => {
     // console.log("hit outside");
@@ -99,19 +69,13 @@ const Card = ({ profile }) => {
   if (isError) {
     return <div>{toast.error("Error loading data")}</div>;
   }
- 
+
   return (
     <div>
       <div className="">
         <div className="m-2">
           <div className="card bg-gradient-to-r from-[#006663] to-[#111111] shadow-xl">
-            <ReactPlayer
-              
-              width={"100%"}
-              
-              controls
-              url={videoLink}
-            />
+            <ReactPlayer width={"100%"} controls url={videoLink} />
             <div className="card-body">
               <h2 className="card-title">{title}</h2>
               <div className="">

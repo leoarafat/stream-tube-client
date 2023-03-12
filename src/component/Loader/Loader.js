@@ -1,17 +1,20 @@
 import React from "react";
-import { Triangle } from "react-loader-spinner";
+import { ThreeCircles } from "react-loader-spinner";
 
 const Loader = () => {
   return (
-    <div>
-      <Triangle
-        height="80"
-        width="80"
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+    }}>
+      <ThreeCircles
+        height="100"
+        width="100"
         color="#4fa94d"
-        ariaLabel="triangle-loading"
-        wrapperStyle={{}}
-        wrapperClassName=""
         visible={true}
+        ariaLabel="three-circles-rotating"
       />
     </div>
   );

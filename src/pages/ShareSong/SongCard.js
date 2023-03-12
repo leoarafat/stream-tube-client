@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
 import { BsCalendarEvent } from "react-icons/bs";
@@ -8,8 +8,6 @@ import { SlUserFollow } from "react-icons/sl";
 import { TfiComment } from "react-icons/tfi";
 import ReactPlayer from "react-player";
 import Loader from "../../component/Loader/Loader";
-import { AuthContext } from "../../context/ContextProvider/ContextProvider";
-import SongComment from "../Songs/SongCpmment";
 
 const SongCard = ({ song }) => {
   const {
@@ -23,11 +21,8 @@ const SongCard = ({ song }) => {
     _id,
   } = song?.item;
 
-  const [comment, setComment] = useState("");
   const [likeCount, setLikeCount] = useState(like);
 
-  // console.log(comment);
-  const { user } = useContext(AuthContext);
   const queryKey = ["songComment"];
   const queryFn = async () => {
     const response = await fetch(
@@ -37,40 +32,7 @@ const SongCard = ({ song }) => {
     return jsonData;
   };
 
-  const {
-    data: moviesCommentData,
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery(queryKey, queryFn);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(`Submitting comment: ${comment}`);
-    const commentInfo = {
-      userName: user?.displayName,
-      comment,
-      postId: _id,
-      time: new Date(),
-    };
-    // console.log('comment')
-
-    fetch(`https://stream-tube-server-leoarafat.vercel.app/songComment`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(commentInfo),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        console.log("hit inside");
-        if (data.acknowledged) {
-          refetch();
-          toast.success("Comment added successful");
-        }
-      });
-  };
+  const { data, isLoading, isError } = useQuery(queryKey, queryFn);
 
   const handleLike = (Id) => {
     // console.log("hit outside");
@@ -101,14 +63,11 @@ const SongCard = ({ song }) => {
     <div>
       <div className="">
         <div className="">
-          <div className="card 
-          bg-gradient-to-r from-[#006663] to-[#111111] shadow-xl">
-            <ReactPlayer
-              width={"100%"}
-              
-              controls
-              url={videoLink}
-            />
+          <div
+            className="card 
+          bg-gradient-to-r from-[#006663] to-[#111111] shadow-xl"
+          >
+            <ReactPlayer width={"100%"} controls url={videoLink} />
             <div className="card-body">
               <h2 className="card-title">{title}</h2>
               <div className="">
@@ -125,8 +84,10 @@ const SongCard = ({ song }) => {
                   <span className="ml-1">{Views} Viewers</span>
                 </p>
               </div>
-              <ul className="flex justify-center items-center shadow-md 
-              bg-gradient-to-r from-[#006663] to-[#111111] rounded-sm">
+              <ul
+                className="flex justify-center items-center shadow-md 
+              bg-gradient-to-r from-[#006663] to-[#111111] rounded-sm"
+              >
                 <li onClick={() => handleLike(_id)} className="p-2 mr-5">
                   <div className="indicator">
                     <AiOutlineLike className="w-8 h-8" />

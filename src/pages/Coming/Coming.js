@@ -3,21 +3,13 @@ import { Pagination, Navigation } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import Marquee from "react-fast-marquee";
+
 import "./styles.css";
 
-
-
-
 const Coming = () => {
-   
   return (
-    
     <div>
-<p className="">
-<h1 className="text-2xl text-center text-primary p-4">See Whats new is comming...</h1>
-</p>
-        <Swiper
+      <Swiper
         pagination={{
           type: "fraction",
         }}

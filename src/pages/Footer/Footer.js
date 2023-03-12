@@ -8,7 +8,6 @@ const Footer = () => {
           <div class="container m-auto space-y-8 px-6 text-white dark:text-gray-300 md:px-12 lg:px-20">
             <div>
               <div class="mb-6 items-center justify-between gap-6 py-6 sm:flex md:mb-16 md:space-y-6 md:py-0">
-
                 <div class="mt-6 flex flex-col-reverse flex-wrap gap-6 sm:mt-0 sm:flex-row sm:items-center">
                   <select
                     name="langage"
@@ -21,7 +20,7 @@ const Footer = () => {
                   </select>
                   <div class="flex gap-6">
                     <a
-                      href="#"
+                      href="/"
                       target="blank"
                       aria-label="github"
                       class="hover:text-primary"
@@ -38,7 +37,7 @@ const Footer = () => {
                       </svg>
                     </a>
                     <a
-                      href="#"
+                      href="/"
                       target="blank"
                       aria-label="twitter"
                       class="hover:text-primary"
@@ -55,7 +54,7 @@ const Footer = () => {
                       </svg>
                     </a>
                     <a
-                      href="#"
+                      href="/"
                       target="blank"
                       aria-label="medium"
                       class="hover:text-primary"
@@ -82,27 +81,27 @@ const Footer = () => {
                     </h6>
                     <ul class="mt-4 list-inside space-y-4">
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           About
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Customers
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Enterprise
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Partners
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Jobs
                         </a>
                       </li>
@@ -114,27 +113,27 @@ const Footer = () => {
                     </h6>
                     <ul class="mt-4 list-inside space-y-4">
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           About
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Customers
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Enterprise
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Partners
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Jobs
                         </a>
                       </li>
@@ -146,27 +145,27 @@ const Footer = () => {
                     </h6>
                     <ul class="mt-4 list-inside space-y-4">
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           About
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Customers
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Enterprise
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Partners
                         </a>
                       </li>
                       <li>
-                        <a href="#" class="transition hover:text-primary">
+                        <a href="/" class="transition hover:text-primary">
                           Jobs
                         </a>
                       </li>

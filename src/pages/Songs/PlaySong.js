@@ -16,6 +16,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import SongComment from "./SongCpmment";
 import Swal from "sweetalert2";
+import Loader from "../../component/Loader/Loader";
 const PlaySong = () => {
   const { user } = useContext(AuthContext);
   // console.log(user?.email);
@@ -90,7 +91,7 @@ const PlaySong = () => {
 
   const handleLike = (id) => {
     if (user?.email) {
-      fetch(`http://localhost:5000/songLike/${id}`, {
+      fetch(`https://stream-tube-server-leoarafat.vercel.app/songLike/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -121,11 +122,15 @@ const PlaySong = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   }
 
   if (isError) {
-    return <div>Error loading data</div>;
+    return <div>{toast.error("Error loading data")}</div>;
   }
   const handleShare = (item) => {
     const postData = { item, email: user?.email };
@@ -160,7 +165,7 @@ const PlaySong = () => {
     }
   };
   return (
-    <div className="bg-gradient-to-r from-[#141e30] to-[#243b55] p-3">
+    <div className="bg-gradient-to-r from-[#141e30] to-[#243b55] p-3 ">
       <div className="md:grid grid-cols-12 mt-[100px]">
         <div className="col-span-8">
           <div className="card bg-gradient-to-r from-[#006663] to-[#111111] text-white shadow-2xl">

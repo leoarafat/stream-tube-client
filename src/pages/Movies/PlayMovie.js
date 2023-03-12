@@ -16,7 +16,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import MovieComment from "./MovieComment";
-import SweetAlert from "react-swal";
+import Loader from "../../component/Loader/Loader";
 const PlayMovie = () => {
   const { user } = useContext(AuthContext);
   console.log(user?.email);
@@ -90,7 +90,7 @@ const PlayMovie = () => {
 
   const handleLike = (id) => {
     if (user?.email) {
-      fetch(`http://localhost:5000/movieLike/${id}`, {
+      fetch(`https://stream-tube-server-leoarafat.vercel.app/movieLike/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -121,11 +121,15 @@ const PlayMovie = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
   }
 
   if (isError) {
-    return <div>Error loading data</div>;
+    return <div>{toast.error("Error loading data")}</div>;
   }
   const handleShare = (item) => {
     const postData = { item, email: user?.email };
@@ -160,14 +164,14 @@ const PlayMovie = () => {
     }
   };
   return (
-    <div className="bg-gradient-to-r from-[#141e30] to-[#243b55] p-3">
+    <div className="bg-gradient-to-r from-[#141e30] to-[#243b55] p-3 ">
       <div className="md:grid grid-cols-12 mt-[100px]">
         <div className="col-span-8">
           <div className="card bg-gradient-to-r from-[#006663] to-[#111111] bg-base-100 shadow-xl">
             <ReactPlayer
               playing
               width={"100%"}
-              height={"100%"}
+              height={"50%"}
               controls
               url={videoLink}
             />
@@ -243,36 +247,37 @@ const PlayMovie = () => {
                 />
               ))}
             </div>
-            {user?.uid ? (
-              <form
-                onSubmit={handleSubmit}
-                className="bg-gradient-to-r from-[#006663] to-[#111111] rounded-lg p-4 hover:shadow-lg"
-              >
-                <textarea
-                  value={comment}
-                  onChange={handleCommentChange}
-                  className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-                  placeholder="Write a comment"
-                />
+
+            <form
+              onSubmit={handleSubmit}
+              className="bg-gradient-to-r from-[#006663] to-[#111111] rounded-lg p-4 hover:shadow-lg"
+            >
+              <textarea
+                value={comment}
+                onChange={handleCommentChange}
+                className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+                placeholder="Write a comment"
+              />
+              {user?.email ? (
                 <button
                   type="submit"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md mt-2"
                 >
                   Submit
                 </button>
-              </form>
-            ) : (
-              <Link to={"/login"}>
-                <button
-                  type="submit"
-                  className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
-                >
-                  <span className="relative text-base font-semibold text-white dark:text-dark">
-                    LogIn
-                  </span>
-                </button>
-              </Link>
-            )}
+              ) : (
+                <Link to={"/login"}>
+                  <button
+                    type="submit"
+                    className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
+                  >
+                    <span className="relative text-base font-semibold text-white dark:text-dark">
+                      LogIn
+                    </span>
+                  </button>
+                </Link>
+              )}
+            </form>
           </div>
         </div>
       </div>
