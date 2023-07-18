@@ -48,12 +48,10 @@ const Song = ({ song }) => {
               View song
             </button>
           </Link>
-          
         </div>
       )}
       <div className="absolute bottom-0 left-0 right-0 px-6 py-4">
         <h3 className="text-xl font-bold text-white">{title}</h3>
-      
       </div>
     </div>
   );

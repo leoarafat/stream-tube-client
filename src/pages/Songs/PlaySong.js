@@ -235,7 +235,7 @@ const PlaySong = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-4 pl-2">
+        <div className="col-span-4  mt-2 lg:ml-2">
           <div>
             <div>
               {songCommentData?.map((comment) => (

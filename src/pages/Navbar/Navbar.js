@@ -19,7 +19,7 @@ const Navbar = () => {
     >
       <nav>
         <div className="container mx-auto">
-          <div className="flex flex-wrap items-center justify-between py-6 gap-6 md:py-4 md:gap-0">
+          <div className="flex items-center justify-between py-6 gap-6 md:py-4 md:gap-0">
             <input
               type="checkbox"
               name="toggle_nav"

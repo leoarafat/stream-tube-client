@@ -88,30 +88,40 @@ const PlayMovie = () => {
     setComment(event.target.value);
   };
 
-  const handleLike = (id) => {
+  const handleLike = async (id) => {
     if (user?.email) {
-      fetch(`https://stream-tube-server-leoarafat.vercel.app/movieLike/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: user?.email }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.message === "movie liked successfully") {
-            setLiked(!liked);
-            setLikeCount((prevLikeCount) => prevLikeCount + (liked ? -1 : 1));
-          } else if (data.message === "movie unliked successfully") {
-            setLiked(!liked);
-            setLikeCount((prevLikeCount) => prevLikeCount - 1);
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Unable to like movie",
-            });
+      try {
+        const response = await fetch(
+          `https://stream-tube-server-leoarafat.vercel.app/movieLike/${id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: user?.email }),
           }
+        );
+
+        const data = await response.json();
+
+        if (data.message === "movie liked successfully") {
+          setLiked(true);
+          setLikeCount((prevLikeCount) => prevLikeCount + 1);
+        } else if (data.message === "movie unliked successfully") {
+          setLiked(false);
+          setLikeCount((prevLikeCount) => prevLikeCount - 1);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Unable to like movie",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Unable to like movie",
         });
+      }
     } else {
       Swal.fire({
         icon: "error",
@@ -234,7 +244,7 @@ const PlayMovie = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-4 pl-2">
+        <div className="col-span-4 mt-2 lg:ml-2">
           <div>
             <div>
               {moviesCommentData?.map((comment) => (

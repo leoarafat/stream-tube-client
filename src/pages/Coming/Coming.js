@@ -8,7 +8,7 @@ import "./styles.css";
 
 const Coming = () => {
   return (
-    <div>
+    <div className="mt-[100px]">
       <Swiper
         pagination={{
           type: "fraction",
